@@ -7,13 +7,14 @@ intro: Assessment → interpret evidence → feedback → respond → report.
 ---
 ## Vocabulary
 
-
 | Evidence | Attainment | Understanding | Misconception | Depth |
 | --------- | ---------- | ------------- | ------------- | --------- |
 | Progress | Retention | Retrieval | Fluency | Reasoning |
 | Diagnose | Interpret | Monitor | Adapt | Respond |
 | Formative | Summative | Feedback | Criteria | Next step |
 
+---
+**ASSESSMENT FOUNDATIONS & EVIDENCE**
 
 ## How do you assess learning?
 
@@ -61,7 +62,8 @@ I ask what the evidence shows, whether the pattern is class-wide or individual, 
 
 **evidence → diagnosis → response → recheck**
 
-
+---
+**ASSESSMENT FOR LEARNING & ASSESSMENT AS LEARNING**
 
 ## What is your understanding of Assessment as Learning?
 
@@ -125,6 +127,9 @@ I use student responses, work, questioning and exit evidence to decide whether t
 
 🎯 → 📊 → 🪞 → 🔎 → 🔧
 
+---
+**ASSESSMENT STRATEGIES**
+
 ## How do you use questioning as assessment rather than simply checking answers?
 
 ### Good questioning exposes thinking; it does not merely collect answers.
@@ -185,6 +190,21 @@ If progress is limited, I review the strategy, intensity, duration or underlying
 
 📍 → 🎯 → 🤲 → 📊 → 🔎
 
+## Share an effective method you have used to assign and assess classwork or homework.
+
+### I prefer short, purposeful tasks that give me usable evidence rather than work completed for its own sake.
+
+For example, I may set a small set of carefully chosen mathematics questions that include retrieval, a current learning focus and one transfer or challenge item. At the next lesson I sample responses, use mini-whiteboards or discussion to expose methods and address common misconceptions efficiently.
+
+That makes the task part of the learning sequence: practise, retrieve, assess and respond.
+
+**assign → retrieve → sample → diagnose → respond**
+
+📝 → 🔄 → 👀 → 🔎 → 🔧
+
+---
+**SUMMATIVE & FORMAL ASSESSMENT**
+
 ## How do formative and summative assessment work together?
 
 ### Summative assessment tells me where learning has reached; formative assessment helps me decide how to move it forward.
@@ -208,6 +228,9 @@ I use all of these alongside day-to-day formative evidence and analyse outcomes 
 **common → CBA → exam → analyse → inform**
 
 🤝 → 🗂️ → 📝 → 🔎 → 🧭
+
+---
+**FEEDBACK & STUDENT RESPONSE**
 
 ## What makes feedback useful?
 
@@ -269,17 +292,8 @@ Used well, it develops metacognition, ownership and the ability to recognise qua
 
 📋 → 👨‍🏫 → ⚖️ → 🪞 → 📈
 
-## Share an effective method you have used to assign and assess classwork or homework.
-
-### I prefer short, purposeful tasks that give me usable evidence rather than work completed for its own sake.
-
-For example, I may set a small set of carefully chosen mathematics questions that include retrieval, a current learning focus and one transfer or challenge item. At the next lesson I sample responses, use mini-whiteboards or discussion to expose methods and address common misconceptions efficiently.
-
-That makes the task part of the learning sequence: practise, retrieve, assess and respond.
-
-**assign → retrieve → sample → diagnose → respond**
-
-📝 → 🔄 → 👀 → 🔎 → 🔧
+---
+**REPORTING & COMMUNICATION**
 
 ## How do you report progress?
 
@@ -292,6 +306,18 @@ Where possible, I make the next step clear so that reporting is informative rath
 **attainment → progress → evidence → priority → report**
 
 📊 → 📈 → 🗂️ → 🎯 → 🗣️
+
+## AfL Reporting — A fifth-year student gets 44% and another gets 77%. How would you report on each?
+
+### I would not simply translate the percentage into “weak” or “good”; I would use the assessment evidence to identify the next learning step for each student.
+
+For the student who got **44%**, I might report: *You have shown understanding of the core ideas, but there are gaps in applying them independently. Your next step is to revisit the identified misconceptions and complete targeted practice before moving on.*
+
+For the student who got **77%**, I might report: *You have demonstrated secure understanding and can apply the main concepts accurately. Your next step is to address the areas where marks were lost and extend your learning through more demanding or unfamiliar problems.*
+
+The percentage matters, but AfL reporting should also identify **strengths, misconceptions and what happens next**. The 44% student needs a route forward; the 77% student needs a route forward too.
+
+**evidence → strength → gap → next step → action**
 
 ## How do you report progress to parents or guardians?
 
