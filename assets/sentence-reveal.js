@@ -180,17 +180,23 @@
   const synth = window.speechSynthesis;
   if (!synth || typeof SpeechSynthesisUtterance === 'undefined') return;
 
+  const PLAY = '▶';
+  const PAUSE = '⏸';
+  const STOP = '⏹';
+
   const readButton = document.createElement('button');
   readButton.type = 'button';
   readButton.className = 'read-aloud-button';
-  readButton.textContent = '🔊 Read aloud';
-  readButton.title = 'Read the visible document aloud';
+  readButton.textContent = PLAY;
+  readButton.title = 'Play / resume reading aloud';
+  readButton.setAttribute('aria-label', 'Play reading aloud');
 
   const stopButton = document.createElement('button');
   stopButton.type = 'button';
   stopButton.className = 'read-aloud-stop';
-  stopButton.textContent = '■ Stop';
-  stopButton.title = 'Stop reading aloud';
+  stopButton.textContent = STOP;
+  stopButton.title = 'Stop and return to the beginning';
+  stopButton.setAttribute('aria-label', 'Stop reading aloud');
   stopButton.hidden = true;
 
   const editLink = toolbar.querySelector('.edit-link');
@@ -202,16 +208,40 @@
   }
 
   let utterance = null;
-  let activeReadButton = null;
-  let activeSectionStop = null;
+  let activePlayButton = null;
+  let activeStopButton = null;
+
+  const setButtonToPlay = button => {
+    if (!button) return;
+    button.textContent = PLAY;
+    button.title = 'Play / resume reading aloud';
+    button.setAttribute('aria-label', 'Play or resume reading aloud');
+  };
+
+  const setButtonToPause = button => {
+    if (!button) return;
+    button.textContent = PAUSE;
+    button.title = 'Pause reading aloud';
+    button.setAttribute('aria-label', 'Pause reading aloud');
+  };
+
+  const showPlayingControls = () => {
+    setButtonToPause(activePlayButton || readButton);
+    (activeStopButton || stopButton).hidden = false;
+  };
+
+  const showPausedControls = () => {
+    setButtonToPlay(activePlayButton || readButton);
+    (activeStopButton || stopButton).hidden = true;
+  };
 
   const resetControls = () => {
-    readButton.textContent = '🔊 Read aloud';
+    setButtonToPlay(readButton);
     stopButton.hidden = true;
-    if (activeReadButton) activeReadButton.textContent = '🔊 Read';
-    if (activeSectionStop) activeSectionStop.hidden = true;
-    activeReadButton = null;
-    activeSectionStop = null;
+    if (activePlayButton && activePlayButton !== readButton) setButtonToPlay(activePlayButton);
+    if (activeStopButton && activeStopButton !== stopButton) activeStopButton.hidden = true;
+    activePlayButton = null;
+    activeStopButton = null;
     utterance = null;
   };
 
@@ -221,43 +251,52 @@
     return clone.innerText.replace(/\s+/g, ' ').trim();
   };
 
-  const speakText = (text, sourceButton = null, sourceStop = null) => {
-    if (!text) return;
+  const stopReading = () => {
     synth.cancel();
     resetControls();
+  };
+
+  const speakText = (text, sourcePlay = readButton, sourceStop = stopButton) => {
+    if (!text) return;
+
+    synth.cancel();
+    resetControls();
+
+    activePlayButton = sourcePlay;
+    activeStopButton = sourceStop;
     utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'en-IE';
     utterance.rate = 0.95;
     utterance.onend = resetControls;
     utterance.onerror = resetControls;
-    stopButton.hidden = false;
-    activeReadButton = sourceButton;
-    activeSectionStop = sourceStop;
-    if (sourceStop) sourceStop.hidden = false;
-    if (sourceButton) sourceButton.textContent = '⏸ Pause';
-    else readButton.textContent = '⏸ Pause';
+
+    showPlayingControls();
     synth.speak(utterance);
   };
 
-  const getVisibleText = () => cleanVisibleText(body);
+  const handlePlayPause = (sourcePlay, sourceStop, getText) => {
+    const isActiveSource = activePlayButton === sourcePlay;
+
+    if (isActiveSource && synth.speaking && !synth.paused) {
+      synth.pause();
+      showPausedControls();
+      return;
+    }
+
+    if (isActiveSource && synth.paused) {
+      synth.resume();
+      showPlayingControls();
+      return;
+    }
+
+    speakText(getText(), sourcePlay, sourceStop);
+  };
 
   readButton.addEventListener('click', () => {
-    if (synth.speaking && !synth.paused) {
-      synth.pause();
-      if (activeReadButton) activeReadButton.textContent = '▶ Resume';
-      else readButton.textContent = '▶ Resume';
-      return;
-    }
-
-    if (synth.paused) {
-      synth.resume();
-      if (activeReadButton) activeReadButton.textContent = '⏸ Pause';
-      else readButton.textContent = '⏸ Pause';
-      return;
-    }
-
-    speakText(getVisibleText());
+    handlePlayPause(readButton, stopButton, () => cleanVisibleText(body));
   });
+
+  stopButton.addEventListener('click', stopReading);
 
   const prepareSectionReaders = () => {
     document.querySelectorAll('.answer-section').forEach(section => {
@@ -268,45 +307,37 @@
       const sectionRead = document.createElement('button');
       sectionRead.type = 'button';
       sectionRead.className = 'section-read-aloud';
-      sectionRead.textContent = '🔊 Read';
-      sectionRead.title = 'Read only this answer aloud';
+      sectionRead.textContent = PLAY;
+      sectionRead.title = 'Play / resume this answer';
+      sectionRead.setAttribute('aria-label', 'Play this answer');
 
       const sectionStop = document.createElement('button');
       sectionStop.type = 'button';
       sectionStop.className = 'section-read-stop';
-      sectionStop.textContent = '■ Stop';
-      sectionStop.title = 'Stop reading this answer';
+      sectionStop.textContent = STOP;
+      sectionStop.title = 'Stop this answer and return to the beginning';
+      sectionStop.setAttribute('aria-label', 'Stop this answer');
       sectionStop.hidden = true;
 
       controls.insertBefore(sectionRead, controls.lastElementChild);
       controls.insertBefore(sectionStop, controls.lastElementChild);
 
+      const getSectionText = () => {
+        const heading = section.querySelector('.answer-heading-row h2');
+        const content = section.querySelector('.section-content');
+        return [heading?.innerText.trim(), content ? cleanVisibleText(content) : ''].filter(Boolean).join('. ');
+      };
+
       sectionRead.addEventListener('click', event => {
         event.preventDefault();
         event.stopPropagation();
-
-        if (activeReadButton === sectionRead && synth.speaking && !synth.paused) {
-          synth.pause();
-          sectionRead.textContent = '▶ Resume';
-          return;
-        }
-        if (activeReadButton === sectionRead && synth.paused) {
-          synth.resume();
-          sectionRead.textContent = '⏸ Pause';
-          return;
-        }
-
-        const heading = section.querySelector('.answer-heading-row h2');
-        const content = section.querySelector('.section-content');
-        const text = [heading?.innerText.trim(), content ? cleanVisibleText(content) : ''].filter(Boolean).join('. ');
-        speakText(text, sectionRead, sectionStop);
+        handlePlayPause(sectionRead, sectionStop, getSectionText);
       });
 
       sectionStop.addEventListener('click', event => {
         event.preventDefault();
         event.stopPropagation();
-        synth.cancel();
-        resetControls();
+        stopReading();
       });
 
       if (editLink?.href) {
@@ -327,11 +358,6 @@
   const sectionReaderObserver = new MutationObserver(prepareSectionReaders);
   sectionReaderObserver.observe(body, { childList: true, subtree: true });
   prepareSectionReaders();
-
-  stopButton.addEventListener('click', () => {
-    synth.cancel();
-    resetControls();
-  });
 
   window.addEventListener('beforeunload', () => synth.cancel());
 })();
